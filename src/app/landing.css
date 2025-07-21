@@ -1,0 +1,89 @@
+/* Global section padding */
+.section {
+    padding: 80px 0;
+  }
+  
+  /* HERO section: Full-screen with image and dark green overlay */
+  .section-hero {
+    position: relative;
+    height: 100vh;
+    background-image: url('/images/uh-manoa-students-hanging-at-stairs.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    overflow: hidden;
+  }
+  
+  /* Dark green overlay */
+  .section-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 80, 60, 0.65); /* UH Mānoa dark green overlay */
+    z-index: 0;
+  }
+  
+  /* Content stays above overlay */
+  .section-hero > * {
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 1.4s ease-out;
+  }
+  
+  /* INFO section: light background */
+  .section-info {
+    background-color: #f0f4f8;
+    animation: fadeUp 1s ease-out;
+  }
+  
+  /* BUTTONS: UH green style */
+  .btn-uh {
+    background-color: #006747;
+    color: white;
+    border: none;
+  }
+  
+  .btn-uh:hover {
+    background-color: #004d36;
+    color: white;
+  }
+  
+  .btn-uh-outline {
+    background-color: transparent;
+    border: 2px solid #006747;
+    color: #006747;
+  }
+  
+  .btn-uh-outline:hover {
+    background-color: #006747;
+    color: white;
+  }
+  
+  /* FADE animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
