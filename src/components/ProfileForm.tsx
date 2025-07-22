@@ -156,10 +156,26 @@ const ProfileForm: React.FC = () => {
                   </Col>
                   <Col>
                     <h5>{profile.name}</h5>
-                    <p className="mb-1"><strong>Major:</strong> {profile.major}</p>
-                    <p className="mb-1"><strong>Year:</strong> {profile.year}</p>
-                    <p className="mb-1"><strong>Hobbies:</strong> {profile.hobbies.join(', ')}</p>
-                    <p><strong>Bio:</strong> {profile.bio}</p>
+                    <p className="mb-1">
+                      <strong>Major:</strong>
+                      {' '}
+                      {profile.major}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Year:</strong>
+                      {' '}
+                      {profile.year}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Hobbies:</strong>
+                      {' '}
+                      {profile.hobbies.join(', ')}
+                    </p>
+                    <p>
+                      <strong>Bio:</strong>
+                      {' '}
+                      {profile.bio}
+                    </p>
                   </Col>
                 </Row>
               </Card>
