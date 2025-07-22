@@ -51,7 +51,6 @@ const ProfileForm: React.FC = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   if (status === 'loading') return <LoadingSpinner />;
@@ -119,7 +118,13 @@ const ProfileForm: React.FC = () => {
 
                   {preview && (
                     <div className="text-center mt-3">
-                      <Image src={preview} alt="Profile Preview" width={100} height={100} className="rounded-circle" />
+                      <Image
+                        src={preview}
+                        alt="Profile Preview"
+                        width={100}
+                        height={100}
+                        className="rounded-circle"
+                      />
                     </div>
                   )}
 
@@ -129,7 +134,14 @@ const ProfileForm: React.FC = () => {
                     <Button type="submit" variant="success">
                       Save Profile
                     </Button>
-                    <Button type="button" onClick={() => { reset(); setPreview(null); }} variant="secondary">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        reset();
+                        setPreview(null);
+                      }}
+                      variant="secondary"
+                    >
                       Reset
                     </Button>
                   </div>
@@ -142,8 +154,8 @@ const ProfileForm: React.FC = () => {
         <Row className="mt-5">
           <Col>
             <h4 className="text-white mb-3">Meet Other Students</h4>
-            {defaultProfiles.map((profile, idx) => (
-              <Card key={idx} className="mb-3 p-2">
+            {defaultProfiles.map((profile) => (
+              <Card key={profile.name} className="mb-3 p-2">
                 <Row className="align-items-center g-3">
                   <Col xs={3} md={2}>
                     <Image

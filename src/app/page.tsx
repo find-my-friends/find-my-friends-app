@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import './landing.css';
 
 const Home = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isLoggedIn = status === 'authenticated';
 
   return (
