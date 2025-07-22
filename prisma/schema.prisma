@@ -10,11 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // for local development
   url      = env("DATABASE_URL")
-  // for Vercel
-  // url       = env("POSTGRES_PRISMA_URL")
-  // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 enum Role {
@@ -26,7 +22,9 @@ model User {
   id       Int    @id @default(autoincrement())
   email    String @unique
   password String
-  role     Role   @default(USER)
+
+  groupEvents GroupEvent[] @relation("UserCreatedEvents")
+  attendances Attendee[]   @relation("UserAttendances")
 }
 
 enum Condition {
@@ -36,10 +34,31 @@ enum Condition {
   poor
 }
 
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
+model GroupEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  location    String
+  date        DateTime
+  tags        String[]
+
+  createdBy   User @relation("UserCreatedEvents", fields: [createdById], references: [id])
+  createdById Int
+
+  attendees Attendee[]
+  createdAt DateTime   @default(now())
+}
+
+model Attendee {
+  id Int @id @default(autoincrement())
+
+  user   User @relation("UserAttendances", fields: [userId], references: [id])
+  userId Int
+
+  event   GroupEvent @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, eventId])
 }
