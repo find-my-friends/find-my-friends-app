@@ -48,13 +48,9 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
-    //   error: '/auth/error',
-    //   verifyRequest: '/auth/verify-request',
-    //   newUser: '/auth/new-user'
   },
   callbacks: {
     session: ({ session, token }) => {
-      // console.log('Session Callback', { session, token })
       return {
         ...session,
         user: {
@@ -65,7 +61,6 @@ const authOptions: NextAuthOptions = {
       };
     },
     jwt: ({ token, user }) => {
-      // console.log('JWT Callback', { token, user })
       if (user) {
         const u = user as unknown as any;
         return {
@@ -75,6 +70,9 @@ const authOptions: NextAuthOptions = {
         };
       }
       return token;
+    },
+    redirect: async ({ baseUrl }) => {
+      return baseUrl; // ✅ Redirect to homepage after login
     },
   },
   secret: process.env.NEXTAUTH_SECRET,

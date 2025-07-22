@@ -1,0 +1,15 @@
+.profile-page {
+    background-color: #006747; /* UH Mānoa dark green */
+    min-height: 100vh;
+    padding-top: 40px;
+  }
+  
+  .profile-page .card {
+    border-radius: 1rem;
+  }
+  
+  .profile-page h2,
+  .profile-page h4 {
+    color: white;
+  }
+  
