@@ -43,3 +43,20 @@ model Stuff {
   condition Condition @default(good)
   owner     String
 }
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+}
+
+model GroupEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  createdById Int
+  tags        String[]  // or Json depending on how you want to store tags
+}
