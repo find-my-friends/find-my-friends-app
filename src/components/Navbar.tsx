@@ -13,6 +13,7 @@ const NavBar: React.FC = () => {
   const userWithRole = session?.user as { email: string; randomKey: string };
   const role = userWithRole?.randomKey;
   const pathName = usePathname();
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -27,6 +28,9 @@ const NavBar: React.FC = () => {
                   </Nav.Link>,
                   <Nav.Link id="list-stuff-nav" href="/list" key="list" active={pathName === '/list'}>
                     List Stuff
+                  </Nav.Link>,
+                  <Nav.Link id="match-page-nav" href="/match" key="match" active={pathName === '/match'}>
+                    Match Page
                   </Nav.Link>,
                 ]
               : ''}
