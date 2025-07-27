@@ -26,8 +26,8 @@ const NavBar: React.FC = () => {
                   <Nav.Link id="add-stuff-nav" href="/add" key="add" active={pathName === '/add'}>
                     Profile
                   </Nav.Link>,
-                  <Nav.Link id="list-stuff-nav" href="/list" key="list" active={pathName === '/list'}>
-                    List Stuff
+                  <Nav.Link id="chat-nav" href="/chat" key="chat" active={pathName === '/chat'}>
+                    Chat
                   </Nav.Link>,
                   <Nav.Link id="match-page-nav" href="/match" key="match" active={pathName === '/match'}>
                     Match Page
