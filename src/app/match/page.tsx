@@ -9,14 +9,12 @@ const WorldMap = dynamic(() => import('@/components/WorldMap'), {
   loading: () => <p>Loading map...</p>,
 });
 
-const MatchPage = () => {
-  return (
-    <Container className="py-5">
-      <h1>Match Page</h1>
-      <p>friend matching feature to be implemented here</p>
-      <WorldMap />
-    </Container>
-  );
-};
+const MatchPage = () => (
+  <Container className="py-5">
+    <h1>Match Page</h1>
+    <p>friend matching feature to be implemented here</p>
+    <WorldMap />
+  </Container>
+);
 
 export default MatchPage;
