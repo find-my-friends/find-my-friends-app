@@ -60,3 +60,14 @@ model GroupEvent {
   createdById Int
   tags        String[]  // or Json depending on how you want to store tags
 }
+
+model Student {
+  id       String   @id @default(uuid())
+  name     String
+  major    String
+  year     String
+  hobbies  String[]
+  bio      String
+  image    String
+  owner    String   @unique
+}
