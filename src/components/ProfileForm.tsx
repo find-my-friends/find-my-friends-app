@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import { redirect } from 'next/navigation';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { upsertStudent } from '@/lib/dbActions';
 import './ProfileForm.css';
 
@@ -19,7 +19,7 @@ const defaultProfiles = [
     hobbies: ['Surfing', 'Drawing'],
     bio: 'Loves beach days and learning about marine life.',
     photo: '/profile-pictures/lana.png',
-    owner: 'lana@demo.com',
+    owner: 'lana@example.com',
   },
   {
     name: 'Jason T.',
@@ -28,7 +28,7 @@ const defaultProfiles = [
     hobbies: ['Coding', 'Gaming', 'Climbing'],
     bio: 'Building full-stack apps and climbing boulders.',
     photo: '/profile-pictures/jason.png',
-    owner: 'jason@demo.com',
+    owner: 'jason@example.com',
   },
   {
     name: 'Malia A.',
@@ -37,7 +37,7 @@ const defaultProfiles = [
     hobbies: ['Yoga', 'Writing', 'Hiking'],
     bio: 'Passionate about mindfulness and mental health.',
     photo: '/profile-pictures/malia.png',
-    owner: 'malia@demo.com',
+    owner: 'malia@example.com',
   },
 ];
 
@@ -55,7 +55,7 @@ const ProfileForm: React.FC = () => {
     setValue,
   } = useForm();
 
-  const fetchProfiles = async () => {
+  const fetchProfiles = useCallback(async () => {
     try {
       const res = await fetch('/api/auth/profiles');
       const data = await res.json();
@@ -74,11 +74,11 @@ const ProfileForm: React.FC = () => {
     } catch (error) {
       console.error('Error loading profiles:', error);
     }
-  };
+  }, [currentUser, setValue]);
 
   useEffect(() => {
     fetchProfiles();
-  }, []);
+  }, [fetchProfiles]);
 
   if (status === 'loading') return <LoadingSpinner />;
   if (status === 'unauthenticated') redirect('/auth/signin');
@@ -200,8 +200,8 @@ const ProfileForm: React.FC = () => {
         <Row className="mt-5">
           <Col>
             <h4 className="text-white mb-3">Meet Other Students</h4>
-            {allProfiles.map((profile, index) => (
-              <Card key={profile.name + index} className="mb-3 p-2">
+            {allProfiles.map((profile) => (
+              <Card key={profile.owner || profile.name} className="mb-3 p-2">
                 <Row className="align-items-center g-3">
                   <Col xs={3} md={2}>
                     <Image
@@ -214,10 +214,26 @@ const ProfileForm: React.FC = () => {
                   </Col>
                   <Col>
                     <h5>{profile.name}</h5>
-                    <p className="mb-1"><strong>Major:</strong> {profile.major}</p>
-                    <p className="mb-1"><strong>Year:</strong> {profile.year}</p>
-                    <p className="mb-1"><strong>Hobbies:</strong> {Array.isArray(profile.hobbies) ? profile.hobbies.join(', ') : profile.hobbies}</p>
-                    <p><strong>Bio:</strong> {profile.bio}</p>
+                    <p className="mb-1">
+                      <strong>Major:</strong>
+                      {' '}
+                      {profile.major}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Year:</strong>
+                      {' '}
+                      {profile.year}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Hobbies:</strong>
+                      {' '}
+                      {Array.isArray(profile.hobbies) ? profile.hobbies.join(', ') : profile.hobbies}
+                    </p>
+                    <p>
+                      <strong>Bio:</strong>
+                      {' '}
+                      {profile.bio}
+                    </p>
                     {profile.owner !== currentUser && (
                       <Button
                         href={`/chat?user=${encodeURIComponent(profile.owner)}`}
