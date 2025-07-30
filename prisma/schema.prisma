@@ -1,8 +1,5 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Learn more at: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -10,11 +7,12 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // for local development
-  url      = env("DATABASE_URL")
-  // for Vercel
-  // url       = env("POSTGRES_PRISMA_URL")
-  // directUrl = env("POSTGRES_URL_NON_POOLING")
+  // Use this for Vercel Postgres
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+
+  // Optional: Use this for local dev with Docker or local Postgres
+  // url = env("DATABASE_URL")
 }
 
 enum Role {
@@ -27,21 +25,6 @@ model User {
   email    String @unique
   password String
   role     Role   @default(USER)
-}
-
-enum Condition {
-  excellent
-  good
-  fair
-  poor
-}
-
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
 }
 
 model Event {
@@ -58,7 +41,7 @@ model GroupEvent {
   date        DateTime
   location    String
   createdById Int
-  tags        String[]  // or Json depending on how you want to store tags
+  tags        String[]  // optional: switch to Json if needed
 }
 
 model Student {
