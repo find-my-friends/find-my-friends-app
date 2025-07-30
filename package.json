@@ -37,6 +37,7 @@
   "devDependencies": {
     "@playwright/test": "^1.48.2",
     "@types/bcrypt": "^5.0.2",
+    "@types/leaflet": "^1.9.20",
     "@types/node": "^22.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
