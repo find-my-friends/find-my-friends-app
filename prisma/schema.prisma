@@ -7,13 +7,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // Use this for Vercel Postgres
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
-
-  // Optional: Use this for local dev with Docker or local Postgres
-  // url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
+
+
 
 enum Role {
   USER
@@ -25,6 +22,9 @@ model User {
   email    String @unique
   password String
   role     Role   @default(USER)
+
+  hostedEvents GroupEvent[] @relation("HostedEvents")
+  rsvps        GroupEvent[] @relation("RSVPs")
 }
 
 model Event {
@@ -35,22 +35,29 @@ model Event {
 }
 
 model GroupEvent {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(cuid())
   title       String
-  description String
-  date        DateTime
+  description String   // Add this line
   location    String
-  createdById Int
-  tags        String[]  // optional: switch to Json if needed
+  datetime    DateTime
+
+  hostId    Int
+  host      User     @relation("HostedEvents", fields: [hostId], references: [id])
+
+  attendees User[]   @relation("RSVPs")
+
+  createdAt DateTime @default(now())
 }
 
+
+
 model Student {
-  id       String   @id @default(uuid())
-  name     String
-  major    String
-  year     String
-  hobbies  String[]
-  bio      String
-  image    String
-  owner    String   @unique
+  id      String   @id @default(uuid())
+  name    String
+  major   String
+  year    String
+  hobbies String[]
+  bio     String
+  image   String
+  owner   String   @unique
 }
