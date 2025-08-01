@@ -1,7 +1,9 @@
+/* eslint-disable import/prefer-default-export */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export default async function POST(req: NextRequest, { params }: { params: { eventId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { eventId: string } }) {
   try {
     const { userId } = await req.json();
     const { eventId } = params;
