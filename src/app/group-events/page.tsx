@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
 
-// Extend the Session user type to include 'id'
 import type { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
@@ -23,6 +22,7 @@ interface GroupEvent {
   description: string;
   date: string;
   location: string;
+  attendees: { id: string; name: string }[];
 }
 
 export default function GroupEventsPage() {
@@ -35,7 +35,6 @@ export default function GroupEventsPage() {
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
 
-  // Fetch events from API
   async function fetchEvents() {
     try {
       const res = await fetch('/api/group-events');
@@ -55,7 +54,6 @@ export default function GroupEventsPage() {
     fetchEvents();
   }, []);
 
-  // Handle new event submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -81,7 +79,6 @@ export default function GroupEventsPage() {
     }
   };
 
-  // Handle RSVP button click
   const handleRSVP = async (eventId: string) => {
     if (!currentUserId) {
       alert('You must be logged in to RSVP.');
@@ -95,7 +92,7 @@ export default function GroupEventsPage() {
     });
 
     if (res.ok) {
-      fetchEvents(); // Refresh events list to update attendees info
+      fetchEvents();
     } else {
       alert('Failed to RSVP');
     }
@@ -142,6 +139,13 @@ export default function GroupEventsPage() {
               <strong>Location:</strong>
               {' '}
               {event.location}
+            </Card.Text>
+            <Card.Text>
+              <strong>Attendees:</strong>
+              {' '}
+              {event.attendees.length > 0
+                ? event.attendees.map((attendee) => attendee.name).join(', ')
+                : 'No attendees yet'}
             </Card.Text>
             <Button variant="primary" onClick={() => handleRSVP(event.id)}>
               RSVP

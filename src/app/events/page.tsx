@@ -1,13 +1,17 @@
+/* eslint-disable no-alert */
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Modal, Form, Container, Row, Col, Card } from 'react-bootstrap';
 
 type Event = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   date: string;
+  attendees?: { id: number; email: string }[];
+  location?: string;
 };
 
 export default function EventsPage() {
@@ -16,35 +20,60 @@ export default function EventsPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
+  const [location, setLocation] = useState('');
 
-  useEffect(() => {
-    fetch('/api/events')
+  const fetchEvents = useCallback(() => {
+    fetch('/api/group-events')
       .then((res) => res.json())
       .then(setEvents)
       .catch(console.error);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
-    const newEvent = { title, description, date };
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    const res = await fetch('/api/events', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newEvent),
-    });
+      const newEvent = { title, description, datetime: date, location };
 
-    if (res.ok) {
-      const createdEvent = await res.json();
-      setEvents((prev) => [...prev, createdEvent]);
-      setShowModal(false);
-      setTitle('');
-      setDescription('');
-      setDate('');
-    } else {
-      // eslint-disable-next-line no-alert
-      alert('Failed to create event');
+      const res = await fetch('/api/group-events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newEvent),
+      });
+
+      if (res.ok) {
+        const createdEvent = await res.json();
+        setEvents((prev) => [...prev, createdEvent]);
+        setShowModal(false);
+        setTitle('');
+        setDescription('');
+        setDate('');
+        setLocation('');
+      } else {
+        alert('Failed to create event');
+      }
+    },
+    [title, description, date, location],
+  );
+
+  const handleRSVP = async (eventId: string) => {
+    try {
+      const res = await fetch(`/api/group-events/${eventId}/rsvp`, {
+        method: 'POST',
+      });
+
+      if (res.ok) {
+        fetchEvents();
+      } else {
+        alert('Failed to RSVP');
+      }
+    } catch (error) {
+      console.error('RSVP error:', error);
+      alert('Failed to RSVP');
     }
   };
 
@@ -52,17 +81,20 @@ export default function EventsPage() {
     <Container
       className="py-4"
       style={{
-        backgroundColor: '#064e03', // dark green
-        color: 'white', // white text
-        minHeight: '100vh', // full viewport height
+        backgroundColor: '#064e03',
+        color: 'white',
+        minHeight: '100vh',
       }}
     >
-      <div className="d-flex justify-content-between align-items-center mb-4" style={{ gap: '1rem' }}>
+      <div
+        className="d-flex justify-content-between align-items-center mb-4"
+        style={{ gap: '1rem' }}
+      >
         <h2>Group Events</h2>
         <Button
           onClick={() => setShowModal(true)}
           style={{
-            backgroundColor: '#000', // black button
+            backgroundColor: '#000',
             color: 'white',
             border: 'none',
             padding: '0.5rem 1rem',
@@ -81,8 +113,24 @@ export default function EventsPage() {
                 <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
                   🕒
+                  <br />
                   {new Date(event.date).toLocaleString()}
                 </Card.Text>
+                <Card.Text>
+                  📍
+                  <br />
+                  {event.location || 'Location not specified'}
+                </Card.Text>
+                <Card.Text>
+                  <strong>Attendees:</strong>
+                  <br />
+                  {event.attendees && event.attendees.length > 0
+                    ? event.attendees.map((a) => a.email).join(', ')
+                    : 'None yet'}
+                </Card.Text>
+                <Button variant="primary" onClick={() => handleRSVP(event.id)}>
+                  RSVP
+                </Button>
               </Card.Body>
             </Card>
           </Col>
@@ -112,6 +160,16 @@ export default function EventsPage() {
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formLocation">
+              <Form.Label>Location</Form.Label>
+              <Form.Control
+                type="text"
+                required
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
               />
             </Form.Group>
 
