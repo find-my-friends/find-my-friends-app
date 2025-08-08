@@ -106,28 +106,28 @@ const MatchPage = () => {
                 <Col>
                   <h5>{match.name}</h5>
                   <p className="mb-1">
-                    <strong>Major:</strong> 
+                    <strong>Major:</strong>
                     {' '}
                     {match.major}
                   </p>
                   <p className="mb-1">
-                    <strong>Year:</strong> 
+                    <strong>Year:</strong>
                     {' '}
                     {match.year}
                   </p>
                   <p className="mb-1">
                     <strong>Shared Hobbies:</strong>
                     {' '}
-                    {userProfile &&
-                      match.hobbies.filter((h) => userProfile.hobbies.includes(h)).join(', ')}
+                    {userProfile
+                      && match.hobbies.filter((h) => userProfile.hobbies.includes(h)).join(', ')}
                   </p>
                   <p className="mb-1">
-                    <strong>Bio:</strong> 
+                    <strong>Bio:</strong>
                     {' '}
                     {match.bio}
                   </p>
                   <p className="mb-1">
-                    <strong>Score:</strong> 
+                    <strong>Score:</strong>
                     {' '}
                     {match.score}
                   </p>

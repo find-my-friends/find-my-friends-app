@@ -66,7 +66,7 @@ const ProfileForm: React.FC = () => {
           'hobbies',
           Array.isArray(current.hobbies)
             ? current.hobbies.join(', ')
-            : current.hobbies
+            : current.hobbies,
         );
         setValue('bio', current.bio);
         setPreview(current.image);
@@ -224,12 +224,12 @@ const ProfileForm: React.FC = () => {
                   <Col>
                     <h5>{profile.name}</h5>
                     <p className="mb-1">
-                      <strong>Major:</strong> 
+                      <strong>Major:</strong>
                       {' '}
                       {profile.major}
                     </p>
                     <p className="mb-1">
-                      <strong>Year:</strong> 
+                      <strong>Year:</strong>
                       {' '}
                       {profile.year}
                     </p>
@@ -241,7 +241,7 @@ const ProfileForm: React.FC = () => {
                         : profile.hobbies}
                     </p>
                     <p>
-                      <strong>Bio:</strong> 
+                      <strong>Bio:</strong>
                       {' '}
                       {profile.bio}
                     </p>
