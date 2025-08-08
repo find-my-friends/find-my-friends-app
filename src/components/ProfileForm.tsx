@@ -48,12 +48,7 @@ const ProfileForm: React.FC = () => {
   const [realProfiles, setRealProfiles] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-  } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
 
   const fetchProfiles = useCallback(async () => {
     try {
@@ -67,7 +62,12 @@ const ProfileForm: React.FC = () => {
         setValue('name', current.name);
         setValue('major', current.major);
         setValue('year', current.year);
-        setValue('hobbies', Array.isArray(current.hobbies) ? current.hobbies.join(', ') : current.hobbies);
+        setValue(
+          'hobbies',
+          Array.isArray(current.hobbies)
+            ? current.hobbies.join(', ')
+            : current.hobbies,
+        );
         setValue('bio', current.bio);
         setPreview(current.image);
       }
@@ -94,18 +94,23 @@ const ProfileForm: React.FC = () => {
   const onSubmit = async (data: any) => {
     const hobbiesArray = data.hobbies.split(',').map((h: string) => h.trim());
 
-    await upsertStudent({
-      name: data.name,
-      major: data.major,
-      year: data.year,
-      hobbies: hobbiesArray,
-      bio: data.bio,
-      image: preview || '/profile-pictures/default.png',
-      owner: currentUser,
-    });
+    try {
+      await upsertStudent({
+        name: data.name,
+        major: data.major,
+        year: data.year,
+        hobbies: hobbiesArray,
+        bio: data.bio,
+        image: preview || '/profile-pictures/default.png',
+        owner: currentUser,
+      });
 
-    swal('Success', 'Your profile has been saved', 'success', { timer: 2000 });
-    fetchProfiles();
+      swal('Success', 'Your profile has been saved', 'success', { timer: 2000 });
+      fetchProfiles();
+    } catch (err) {
+      console.error('Failed to save profile:', err);
+      swal('Error', 'Could not save profile', 'error');
+    }
   };
 
   const allProfiles = [
@@ -158,7 +163,11 @@ const ProfileForm: React.FC = () => {
 
                   <Form.Group>
                     <Form.Label>Upload Profile Picture</Form.Label>
-                    <Form.Control type="file" accept="image/*" onChange={handleFileUpload} />
+                    <Form.Control
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                    />
                   </Form.Group>
 
                   {preview && (
@@ -227,7 +236,9 @@ const ProfileForm: React.FC = () => {
                     <p className="mb-1">
                       <strong>Hobbies:</strong>
                       {' '}
-                      {Array.isArray(profile.hobbies) ? profile.hobbies.join(', ') : profile.hobbies}
+                      {Array.isArray(profile.hobbies)
+                        ? profile.hobbies.join(', ')
+                        : profile.hobbies}
                     </p>
                     <p>
                       <strong>Bio:</strong>
