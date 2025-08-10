@@ -9,7 +9,7 @@ type Event = {
   id: string;
   title: string;
   description: string;
-  date: string;
+  datetime: string; // changed from 'date' to 'datetime'
   attendees?: { id: number; email: string }[];
   location?: string;
 };
@@ -19,7 +19,7 @@ export default function EventsPage() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
+  const [datetime, setDatetime] = useState('');
   const [location, setLocation] = useState('');
 
   const fetchEvents = useCallback(() => {
@@ -37,7 +37,7 @@ export default function EventsPage() {
     async (e: React.FormEvent) => {
       e.preventDefault();
 
-      const newEvent = { title, description, datetime: date, location };
+      const newEvent = { title, description, datetime, location };
 
       const res = await fetch('/api/group-events', {
         method: 'POST',
@@ -51,13 +51,13 @@ export default function EventsPage() {
         setShowModal(false);
         setTitle('');
         setDescription('');
-        setDate('');
+        setDatetime('');
         setLocation('');
       } else {
         alert('Failed to create event');
       }
     },
-    [title, description, date, location],
+    [title, description, datetime, location],
   );
 
   const handleRSVP = async (eventId: string) => {
@@ -114,7 +114,7 @@ export default function EventsPage() {
                 <Card.Text>
                   🕒
                   <br />
-                  {new Date(event.date).toLocaleString()}
+                  {new Date(event.datetime).toLocaleString()}
                 </Card.Text>
                 <Card.Text>
                   📍
@@ -153,13 +153,13 @@ export default function EventsPage() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formDate">
+            <Form.Group className="mb-3" controlId="formDatetime">
               <Form.Label>Date & Time</Form.Label>
               <Form.Control
                 type="datetime-local"
                 required
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={datetime}
+                onChange={(e) => setDatetime(e.target.value)}
               />
             </Form.Group>
 
